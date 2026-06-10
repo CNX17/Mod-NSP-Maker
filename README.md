@@ -1,215 +1,213 @@
-# Mod NSP Maker — Como Usar / How to Use
+# NSP Mod Maker
 
-> ⚠️ **Disclaimer / Aviso**
+> **Disclaimer / Aviso**
 >
-> 🇺🇸 This tool is intended for **educational and personal use only**. Users are solely responsible for complying with local laws and respecting intellectual property rights. The developers are not responsible for any misuse of this software. This project is **not affiliated with Nintendo Co., Ltd.** or any game publisher. **Freeware — not for commercial use.**
+> This tool is intended for educational and personal use only. Users are solely responsible for complying with local laws and respecting intellectual property rights. Not affiliated with Nintendo Co., Ltd. Freeware — not for commercial use.
 >
-> 🇧🇷 Esta ferramenta destina-se apenas ao **uso educacional e pessoal**. Os usuários são os únicos responsáveis pelo cumprimento das leis locais e pelo respeito aos direitos de propriedade intelectual. Os desenvolvedores não se responsabilizam por qualquer uso indevido deste software. Este projeto **não possui afiliação com a Nintendo Co., Ltd.** ou qualquer editora de jogos. **Freeware — não é para uso comercial.**
+> Esta ferramenta destina-se apenas ao uso educacional e pessoal. Os usuários são os únicos responsáveis pelo cumprimento das leis locais e pelo respeito aos direitos de propriedade intelectual. Não possui afiliação com a Nintendo Co., Ltd. Freeware — não é para uso comercial.
 
 ---
 
-## 🇧🇷 Português
+## Português
 
-**Mod NSP Maker** é um app desktop para Windows que empacota mods de Nintendo Switch em arquivos `.nsp` auto-instaladores. Quando instalado no Switch, o NSP copia os arquivos do mod para os locais corretos no cartão SD automaticamente — sem gerenciamento manual de arquivos.
+**NSP Mod Maker** é um app Windows que aplica um mod LayeredFS diretamente dentro de um novo NSP reconstruído. O resultado é um único `.nsp` que você instala pelo DBI como qualquer outro título — sem depender de `atmosphere/contents` no SD.
 
-### Requisitos
+### O que você precisa
 
 | Item | Observações |
 |---|---|
-| Windows 10/11 (64-bit) | Necessário para rodar o `.exe` |
-| Nintendo Switch com CFW | Atmosphere recomendado |
-| Arquivos do mod | As pastas que você quer instalar |
+| Windows 10/11 (64-bit) | |
+| `NSPModMaker.exe` | Baixe na página de releases |
+| Base Game NSP ou XCI | Arquivo do jogo sem update aplicado |
+| Update NSP | Versão mais recente do update do jogo |
+| Pasta do mod LayeredFS | A pasta `romfs` e/ou `exefs` do mod |
+| Arquivo `prod.keys` | Gerado pelo Lockpick_RCM no seu Switch |
+| Nintendo Switch com CFW | Atmosphere ou CFW compatível |
 
-### Configuração
+> **Sobre o prod.keys:** O app não inclui, gera nem baixa chaves. Você precisa gerar o `prod.keys` no seu próprio Switch usando o homebrew **Lockpick_RCM**. O arquivo fica em `switch/prod.keys` no seu SD. Na primeira execução do app, você vai selecionar esse arquivo. O caminho fica salvo localmente em `%APPDATA%\NSPModMaker\config.json`.
 
-1. Coloque `ModNSPMaker.exe` em qualquer pasta do PC.
-2. Dê duplo clique para abrir.
+### Espaço em disco e tempo de build
 
-### Guia Passo a Passo
+O app extrai, mescla e reconstrói o conteúdo completo do jogo. Para jogos grandes, isso exige bastante espaço e tempo:
 
-#### Aba Configuração
+| Tamanho do jogo | Espaço livre necessário | Tempo aproximado |
+|---|---|---|
+| até ~2 GB | ~10 GB | 5–15 min |
+| ~5–8 GB | ~25 GB | 20–40 min |
+| ~17 GB (ex: Zelda TotK) | ~55 GB | 3–5 horas |
 
-| Campo | O que preencher |
-|---|---|
-| **Ícone do NSP** | Uma imagem JPG de 256×256 — será o ícone exibido no menu do Switch. Outros tamanhos são auto-convertidos ao importar. |
-| **Nome** | Título que aparece no menu do Switch (ex: `Zelda Mod Pack`) |
-| **Publicador** | Seu nome ou grupo (ex: `CostelaBR`) |
-| **Versão** | Versão exibida no Switch (ex: `1.0.0`) |
+Use uma pasta de trabalho em um SSD para reduzir o tempo de build.
 
-#### Aba Mods
+### Como usar
 
-Clique em **➕ Adicionar** para criar uma entrada de mod. Cada mod possui:
+**1. Abra o `NSPModMaker.exe`.**
 
-| Campo | Descrição |
-|---|---|
-| **Nome do Mod** | Rótulo interno (não aparece no Switch) |
-| **TID do Jogo** | Title ID hex de 16 caracteres do jogo (ex: `0100B2D023548000`) |
-| **Pastas do Mod** | Um ou mais mapeamentos de pasta → destino no SD |
-| **Update NSP** | *(Opcional)* Arquivo `.nsp` de update a instalar junto |
-| **Instalar Update NSP** | Marque para instalar o update |
-| **Auto-deletar installer** | Marque para remover o NSP do Switch após instalar |
+Na primeira execução, o app vai pedir o arquivo `prod.keys`. Selecione o arquivo no seu SD ou em uma pasta local.
 
-#### Mapeamentos de Pasta — como os destinos funcionam
+**2. Selecione o Base Game.**
 
-Cada mapeamento liga uma **pasta de origem no PC** a um **caminho de destino no SD** (`sdmc:/`).
+Clique em **Base Game NSP/XCI** e selecione o arquivo `.nsp` ou `.xci` do jogo base (sem update).
 
-| Destino no SD | O que acontece |
-|---|---|
-| *(vazio)* | Os **conteúdos** da pasta são copiados para a **raiz do SD** (`sdmc:/`) |
-| `atmosphere/contents` | A pasta vai para `sdmc:/atmosphere/contents/<nome-da-pasta>/` |
-| `atmosphere/exefs_patches` | Mesma lógica |
-| Qualquer caminho | Relativo a `sdmc:/`, com barras normais |
+**3. Selecione o Update.**
 
-**Exemplo — mod típico do Atmosphere:**
+Clique em **Update NSP** e selecione o arquivo `.nsp` do update mais recente.
+
+**4. Selecione a pasta do mod.**
+
+Clique em **Mod LayeredFS** e selecione a pasta raiz do mod. O app aceita as estruturas mais comuns:
+
 ```
-Pasta de origem:  C:\Mods\BotW\0100509005AF3000
-Destino no SD:    atmosphere/contents
-→ Resultado:      sdmc:/atmosphere/contents/0100509005AF3000/
+romfs/
+exefs/
+<TITLE_ID>/romfs/
+<TITLE_ID>/exefs/
+atmosphere/contents/<TITLE_ID>/romfs/
+atmosphere/contents/<TITLE_ID>/exefs/
 ```
 
-**Exemplo — arquivos na raiz do SD:**
+Se o mod tiver uma pasta ExeFS separada da pasta principal, use o campo **Mod ExeFS (opcional)** para indicá-la.
+
+**5. Confirme o Title ID.**
+
+O app tenta preencher o Title ID automaticamente pelo nome do arquivo. Confirme que está correto — é um número hexadecimal de 16 caracteres, como `0100F2C0115B6000`.
+
+Se não aparecer, você pode encontrar o Title ID do jogo em sites como NSWDB ou consultando o próprio NSP.
+
+**6. Escolha o nome do NSP de saída.**
+
+Clique em **NSP de saída** para escolher onde salvar e o nome do arquivo gerado. Se o arquivo já existir, o app cria automaticamente o próximo nome disponível (`Mod (2).nsp`, etc.).
+
+**7. Clique em Gerar NSP.**
+
+O progresso aparece no log do app. Ao final, o arquivo `.nsp` estará no local escolhido.
+
+### Como instalar no Switch
+
+Use o **DBI** no seu Switch para instalar o NSP gerado. O DBI suporta instalação via USB (MTP) ou pelo SD. Após a instalação, o jogo aparece no menu normalmente.
+
+### Prioridade dos arquivos no NSP final
+
 ```
-Pasta de origem:  C:\Mods\BotW\SaveFiles
-Destino no SD:    (vazio)
-→ Resultado:      sdmc:/ (conteúdo copiado diretamente)
+Base Game  →  Update  →  Mod LayeredFS
 ```
 
-Você pode adicionar **múltiplos mapeamentos por mod** — útil quando o mod tem arquivos que vão para locais diferentes.
+O arquivo do mod tem prioridade máxima. Se o mesmo arquivo existir nos três, o do mod é usado. O NSP final contém o conteúdo completo mesclado — não usa BKTR delta, então é normal que o arquivo gerado seja maior que a base ou o update individualmente.
 
-#### Aba Compilar
+### Resolução de problemas
 
-1. Defina a **Pasta de Saída**.
-2. Clique em **🚀 Compilar Mod NSP**.
-3. Ao terminar, um diálogo mostra o caminho do `.nsp` gerado.
-
-### Instalando no Switch
-
-1. Copie o `.nsp` gerado para o SD do Switch (qualquer local).
-2. Abra seu instalador de NSP preferido (ex: **Tinfoil**, **DBI**) e instale-o.
-3. O novo título aparece no menu do Switch.
-4. Abra-o — o instalador roda automaticamente, copia os arquivos e se deleta (se configurado).
-
-### Dicas
-
-- **Encontrando o TID do jogo:** Use o [SwitchBrew](https://switchbrew.org/wiki/Title_list) ou Tinfoil. Sempre o TID base (termina em `000`).
-- **Auto-conversão de ícone:** Qualquer formato é aceito; o app converte para JPG 256×256.
-- **Múltiplos mods em um NSP:** Adicione várias entradas — todos instalados por um único NSP.
-- **Idioma:** Clique na bandeira (🇧🇷 / 🇺🇸) no canto superior direito para alternar.
-
-### Resolução de Problemas
-
-| Problema | Solução |
+| Problema | O que verificar |
 |---|---|
-| Ícone rejeitado | Use JPG; PNG é auto-convertido ao importar |
-| Switch mostra publicador desconhecido | Preencha o campo Publicador antes de compilar |
-| Arquivos do mod no lugar errado | Verifique o Destino no SD no mapeamento |
+| Title ID não preenchido automaticamente | Verifique se o nome do arquivo NSP contém um hex de 16 caracteres |
+| Falha na extração do Base ou Update | Confirme se o `prod.keys` é do mesmo Switch que originou o conteúdo |
+| Crash no Switch após instalar | Certifique-se de que o Update NSP corresponde ao update mais recente instalado no Switch |
+| Erro de espaço em disco | Libere espaço — veja tabela acima para estimativas por tamanho de jogo |
+| Jogo instalado mas não aparece no menu | Tente reiniciar o Switch após a instalação pelo DBI |
 
 ### Licença
 
-Freeware distribuído sob [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) — gratuito para uso e compartilhamento na forma original; sem modificações, sem uso comercial. Não possui afiliação com a Nintendo Co., Ltd. Veja [LICENSE.md](LICENSE.md).
+Freeware distribuído sob CC BY-NC-ND 4.0 — gratuito para uso e compartilhamento na forma original; sem modificações, sem uso comercial.
 
 ---
 
-## 🇺🇸 English
+## English
 
-**Mod NSP Maker** is a Windows desktop app that packages Nintendo Switch mods into self-installing `.nsp` files. Once installed on the Switch, the NSP copies mod files to the correct SD card locations automatically — no manual file management needed.
+**NSP Mod Maker** is a Windows app that applies a LayeredFS mod directly inside a newly rebuilt NSP. The result is a single `.nsp` you install via DBI like any other title — no need for `atmosphere/contents` on the SD card.
 
-### Requirements
+### What you need
 
 | Item | Notes |
 |---|---|
-| Windows 10/11 (64-bit) | Required to run the `.exe` |
-| Nintendo Switch with CFW | Atmosphere recommended |
-| Mod files | The folders you want to install |
+| Windows 10/11 (64-bit) | |
+| `NSPModMaker.exe` | Download from the releases page |
+| Base Game NSP or XCI | The game file without any update applied |
+| Update NSP | The latest game update |
+| LayeredFS mod folder | The mod's `romfs` and/or `exefs` folder |
+| `prod.keys` file | Generated by Lockpick_RCM on your Switch |
+| Nintendo Switch with CFW | Atmosphere or compatible CFW |
 
-### Setup
+> **About prod.keys:** The app does not include, generate, or download keys. You need to generate `prod.keys` on your own Switch using the **Lockpick_RCM** homebrew. The file is saved to `switch/prod.keys` on your SD card. On first run, the app asks you to select this file. The path is saved locally at `%APPDATA%\NSPModMaker\config.json`.
 
-1. Place `ModNSPMaker.exe` anywhere on your PC.
-2. Double-click to launch.
+### Disk space and build time
 
-### Step-by-Step Guide
+The app extracts, merges, and rebuilds the full game content. For large games this requires significant disk space and time:
 
-#### Settings tab
+| Game size | Free space needed | Approximate time |
+|---|---|---|
+| up to ~2 GB | ~10 GB | 5–15 min |
+| ~5–8 GB | ~25 GB | 20–40 min |
+| ~17 GB (e.g. Zelda TotK) | ~55 GB | 3–5 hours |
 
-| Field | What to fill |
-|---|---|
-| **NSP Icon** | A 256×256 JPG image — becomes the icon on the Switch home screen. Other sizes are auto-converted on import. |
-| **Name** | Title shown on the Switch home menu (e.g. `Zelda Mod Pack`) |
-| **Publisher** | Your name or group (e.g. `CostelaBR`) |
-| **Version** | Version string shown on the Switch (e.g. `1.0.0`) |
+Use a working folder on an SSD to reduce build time.
 
-#### Mods tab
+### How to use
 
-Click **➕ Add** to create a mod entry. Each mod has:
+**1. Open `NSPModMaker.exe`.**
 
-| Field | Description |
-|---|---|
-| **Mod Name** | Internal label (not shown on Switch) |
-| **Game TID** | 16-character hex Title ID of the game (e.g. `0100B2D023548000`) |
-| **Mod Folders** | One or more folder → SD destination mappings |
-| **Update NSP** | *(Optional)* An `.nsp` update file to install alongside the mod |
-| **Install Update NSP** | Check to install the update |
-| **Auto-delete installer** | Check to remove the NSP from the Switch after install |
+On first run, the app will ask for your `prod.keys` file. Select the file from your SD card or a local folder.
 
-#### Folder Mappings — how destinations work
+**2. Select the Base Game.**
 
-Each mapping links a **source folder on your PC** to a **destination path on the SD card** (`sdmc:/`).
+Click **Base Game NSP/XCI** and select the base game `.nsp` or `.xci` file (no update applied).
 
-| SD Destination | What happens |
-|---|---|
-| *(empty)* | **Contents** of the source folder are copied to the **SD root** (`sdmc:/`) |
-| `atmosphere/contents` | The folder is placed at `sdmc:/atmosphere/contents/<folder-name>/` |
-| `atmosphere/exefs_patches` | Same logic |
-| Any custom path | Relative to `sdmc:/`, forward slashes |
+**3. Select the Update.**
 
-**Example — a typical Atmosphere mod:**
+Click **Update NSP** and select the latest update `.nsp` file.
+
+**4. Select the mod folder.**
+
+Click **Mod LayeredFS** and select the mod's root folder. The app accepts the most common structures:
+
 ```
-Source folder:  C:\Mods\BotW\0100509005AF3000
-SD Destination: atmosphere/contents
-→ Result on SD: sdmc:/atmosphere/contents/0100509005AF3000/
+romfs/
+exefs/
+<TITLE_ID>/romfs/
+<TITLE_ID>/exefs/
+atmosphere/contents/<TITLE_ID>/romfs/
+atmosphere/contents/<TITLE_ID>/exefs/
 ```
 
-**Example — copying files to SD root:**
-```
-Source folder:  C:\Mods\BotW\SaveFiles
-SD Destination: (leave empty)
-→ Result on SD: sdmc:/ (contents copied directly)
-```
+If the mod has a separate ExeFS folder, use the **Optional Mod ExeFS** field to point to it.
 
-You can add **multiple mappings per mod** — useful when a mod has files going to different locations.
+**5. Confirm the Title ID.**
 
-#### Build tab
+The app tries to fill the Title ID automatically from the filename. Confirm it is correct — it is a 16-character hex number like `0100F2C0115B6000`.
 
-1. Set the **Output Folder**.
-2. Click **🚀 Build Mod NSP**.
-3. When done, a dialog shows the path to the generated `.nsp`.
+If it is not filled, you can find the Title ID on sites like NSWDB or by inspecting the NSP.
+
+**6. Choose the output NSP name.**
+
+Click **Output NSP** to choose where to save the file and its name. If the file already exists, the app automatically creates the next available name (`Mod (2).nsp`, etc.).
+
+**7. Click Generate NSP.**
+
+Build progress appears in the app log. When done, the `.nsp` file is at the chosen location.
 
 ### Installing on the Switch
 
-1. Copy the generated `.nsp` to your Switch SD card (any location).
-2. Open your NSP installer (e.g. **Tinfoil**, **DBI**) and install it.
-3. The new title appears on the Switch home menu.
-4. Launch it — the installer runs automatically, copies the files, and deletes itself (if configured).
+Use **DBI** on your Switch to install the generated NSP. DBI supports installation via USB (MTP) or from the SD card. After installation, the game appears in the home menu normally.
 
-### Tips
+### File priority in the final NSP
 
-- **Finding a game's Title ID:** Use [SwitchBrew](https://switchbrew.org/wiki/Title_list) or Tinfoil's title list. Always use the base game TID (ends in `000`).
-- **Icon auto-conversion:** Any format is accepted; the app converts to 256×256 JPG automatically.
-- **Multiple mods in one NSP:** Add more than one entry — all installed by a single NSP.
-- **Language:** Click the flag button (🇺🇸 / 🇧🇷) in the top-right corner to toggle.
+```
+Base Game  →  Update  →  LayeredFS Mod
+```
+
+The mod has the highest priority. If the same file exists in all three, the mod file is used. The final NSP contains the fully merged content — it does not use BKTR delta, so it is normal for the output file to be larger than either the base or update individually.
 
 ### Troubleshooting
 
-| Problem | Solution |
+| Problem | What to check |
 |---|---|
-| Icon rejected | Use a JPG; PNG is auto-converted on import |
-| Switch shows unknown publisher | Fill the Publisher field before building |
-| Mod files not in the right place | Double-check the SD Destination path in the mapping |
+| Title ID not filled automatically | Make sure the NSP filename contains a 16-character hex string |
+| Base or Update extraction failed | Confirm that `prod.keys` came from the same Switch that owns the content |
+| Game crashes on Switch after install | Make sure the Update NSP matches the latest update version installed on the Switch |
+| Disk space error | Free up space — see the table above for estimates by game size |
+| Game installed but not showing in menu | Try restarting the Switch after DBI installation |
 
 ### License
 
-Freeware distributed under [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) — free to use and share in original form; no modification, no commercial use. Not affiliated with Nintendo Co., Ltd. See [LICENSE.md](LICENSE.md).
+Freeware distributed under CC BY-NC-ND 4.0 — free to use and share in original form; no modification, no commercial use.
 
 ---
 
-*Mod NSP Maker — CostelaBR 2026*
+*NSP Mod Maker — CostelaBR 2026*
